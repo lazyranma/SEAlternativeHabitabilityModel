@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>8.0</LangVersion>
+    <AssemblyName>AlternativeHabitabilityModel</AssemblyName>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <PluginVersion>0.1.0</PluginVersion>
+    <AssemblyVersion>$(PluginVersion)</AssemblyVersion>
+    <FileVersion>$(PluginVersion)</FileVersion>
+    <InformationalVersion>$(PluginVersion)</InformationalVersion>
+  </PropertyGroup>
+
+  <PropertyGroup><GameDir Condition="'$(GameDir)' == ''">$(SOLAR_EXPANSE_DIR)</GameDir></PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx"><HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>$(GameDir)\BepInEx\core\0Harmony.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Sirenix.Serialization"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\Sirenix.Serialization.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+
+  <!-- Generate VersionConstants.cs from the single $(PluginVersion) property -->
+  <Target Name="GenerateVersionFile" BeforeTargets="BeforeBuild">
+    <WriteLinesToFile
+        File="$(IntermediateOutputPath)VersionConstants.cs"
+        Lines="internal static class VersionConstants { internal const string PluginVersion = &quot;$(PluginVersion)&quot;%3B }"
+        Overwrite="true" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)VersionConstants.cs" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="PackRelease" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <_StageRoot>$(IntermediateOutputPath)zipstage\</_StageRoot>
+    </PropertyGroup>
+    <RemoveDir Directories="$(_StageRoot)" />
+    <MakeDir Directories="$(_StageRoot)AlternativeHabitabilityModel\" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(_StageRoot)AlternativeHabitabilityModel\" />
+    <ZipDirectory SourceDirectory="$(_StageRoot)" DestinationFile="$(OutputPath)AlternativeHabitabilityModel_v$(PluginVersion).zip" Overwrite="true" />
+    <RemoveDir Directories="$(_StageRoot)" />
+  </Target>
+
+</Project>
