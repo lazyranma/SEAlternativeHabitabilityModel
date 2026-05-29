@@ -2,7 +2,7 @@
 BepInEx plugin for Solar Expanse with two independently-toggleable model replacements:
 
 - **Alternative Swing Model** — replaces the vanilla day/night temperature swing with a physically-grounded asymmetric model.
-- **Alternative Mirror Model** — replaces the vanilla mirror strength formula with a same-system étendue-limited model.
+- **Alternative Mirror Model** — replaces the vanilla mirror strength formula with a physically realistic model where mirrors only affect their own planetary system.
 
 Additional model replacements may be added in the future.
 
@@ -213,9 +213,9 @@ Mirrors only affect bodies in their own planetary system. A mirror at Earth's or
 | Earth orbit | Earth | ✓ |
 | Earth orbit | Luna | ✓ |
 | Luna orbit | Earth | ✓ |
-| Earth orbit | Mars | ❌ |
+| Earth orbit | Mars | ✗ |
 | Earth orbit | Towed asteroid at Earth | ✓ |
-| Solar orbit | Anything | ❌ |
+| Solar orbit | Anything | ✗ |
 
 ### Assumptions & simplifications
 
