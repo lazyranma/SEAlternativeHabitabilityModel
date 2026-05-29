@@ -63,7 +63,7 @@ namespace AlternativeHabitabilityModel
             ObjectInfo targetRoot = GetSystemRoot(objectInfo);
             if (mirrorRoot == null || targetRoot == null || mirrorRoot != targetRoot)
             {
-                Plugin.Log?.LogInfo($"[AltMirror] {origin}→{objectInfo.ObjectName} sys mismatch {mirrorRoot?.ObjectName ?? "?"}\u2260{targetRoot?.ObjectName ?? "?"} — skip");
+                Plugin.Log?.LogDebug($"[AltMirror] {origin}→{objectInfo.ObjectName} sys mismatch {mirrorRoot?.ObjectName ?? "?"}≠{targetRoot?.ObjectName ?? "?"} — skip");
                 __result = 0.0;
                 return;
             }
@@ -76,7 +76,6 @@ namespace AlternativeHabitabilityModel
 
             // AltMirror strength: A / (π × R²) per allocated station
             double alt = A_mirror / (Math.PI * radiusM * radiusM) * allocatedCount;
-            Plugin.Log?.LogInfo($"[AltMirror] {origin}→{objectInfo.ObjectName} ×{allocatedCount} vanilla={__result:F3} → alt={alt:F3}");
             __result = alt;
         }
     }

@@ -141,14 +141,6 @@ namespace AlternativeHabitabilityModel
     [HarmonyPatch(typeof(TerraformationConfig.HabitabilityParametersNew), "UpdateTotalHeatCapacity", new[] { typeof(ObjectInfo) })]
     static class Patch_UpdateTotalHeatCapacity_Full
     {
-        private static readonly HashSet<string> _loggedBodies = new HashSet<string>();
-
-        private static void LogRotationPeriod(ObjectInfo oi, double rotPeriod)
-        {
-            if (_loggedBodies.Add(oi.ObjectName))
-                Plugin.Log?.LogInfo($"  [HC] {oi.ObjectName}: RotationPeriod = {rotPeriod:F3} days");
-        }
-
         static bool Prefix(TerraformationConfig.HabitabilityParametersNew __instance, ObjectInfo objectInfo)
         {
             if (__instance == null || objectInfo == null) return true;
@@ -160,9 +152,6 @@ namespace AlternativeHabitabilityModel
                 // ── Rock HC: configurable base, scaled by √P_rot ────
                 double rotPeriod = objectInfo.RotationPeriod;
                 double rockHC = Plugin.BaseRockHC.Value * Math.Sqrt(Math.Max(rotPeriod, 1e-6));
-
-                // Diagnostic: log rotation period once per body
-                LogRotationPeriod(objectInfo, rotPeriod);
 
                 // ── Ocean HC: NormalHeatDepth × √P_rot, capped by water depth ──
                 double currentWater = objectInfo.CurrentWaterAmount;

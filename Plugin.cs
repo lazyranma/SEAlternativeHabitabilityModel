@@ -94,17 +94,6 @@ namespace AlternativeHabitabilityModel
                     "Rock heat capacity at 1-day rotation (J/m²·K).",
                     new AcceptableValueRange<double>(1000.0, 1e8)));
 
-            Log.LogInfo("AlternativeHabitabilityModel loaded.");
-            Log.LogInfo($"  AlternativeSwingModel = {AlternativeSwingModel.Value}");
-            Log.LogInfo($"  AlternativeMirrorModel = {AlternativeMirrorModel.Value}");
-            Log.LogInfo($"  MirrorAreaMkm2 = {MirrorAreaMkm2.Value}");
-            Log.LogInfo($"  UpdateAverageTemperature = {UpdateAverageTemperature.Value}");
-            Log.LogInfo($"  MirrorRedist = {MirrorRedist.Value}");
-            Log.LogInfo($"  TransportPower = {TransportPower.Value}");
-            Log.LogInfo($"  NormalHeatDepth = {NormalHeatDepth.Value}");
-            Log.LogInfo($"  NightFloor = {NightFloor.Value}");
-            Log.LogInfo($"  BaseRockHC = {BaseRockHC.Value}");
-
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -139,6 +128,8 @@ namespace AlternativeHabitabilityModel
 
             _patched = true;
             SceneManager.sceneLoaded -= OnSceneLoaded;
+
+            Log.LogInfo("AlternativeHabitabilityModel loaded.");
         }
 
         private void Patch(Harmony harmony, Type type)
@@ -146,7 +137,6 @@ namespace AlternativeHabitabilityModel
             try
             {
                 harmony.CreateClassProcessor(type).Patch();
-                Log.LogInfo($"  Patched: {type.Name}");
             }
             catch (Exception ex)
             {
