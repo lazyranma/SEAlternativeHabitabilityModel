@@ -32,7 +32,7 @@ namespace AlternativeHabitabilityModel
                 "Temperature",
                 "AlternativeSwingModel",
                 true,
-                "Enable the alternative temperature model.");
+                "Enable the alternative temperature swing model.");
 
             AlternativeMirrorModel = Config.Bind(
                 "Temperature",
