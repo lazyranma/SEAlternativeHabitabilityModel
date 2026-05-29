@@ -8,6 +8,10 @@ Additional model replacements may be added in the future.
 
 > This project was developed with LLM assistance.
 
+## Simulator
+
+Try the model live: [Terraforming Simulator](https://lazyranma.github.io/SETerraformingSimulator/altswing_altmirror.html)
+
 ## Alternative Swing Model
 
 The main motivation for this model is to make Venus and Mercury terraformable while staying close to how real physics works.
@@ -164,17 +168,19 @@ temperatureSwings  = (T_hot − T_cold) / 2               ← half-range (K)
 | Body | T_eq | T_atm | T_avg | T_min | T_max | Flux (W/m²) | f_rot | f_redist | H₂O vapor % |
 |------|------|-------|-------|-------|-------|-------------|-------|----------|-------------|
 | Mercury (vacuum) | +164 °C | +273 °C | +200 °C | −55 °C | +454 °C | 8,266 | 1.00 | 0.00 | – |
-| Mercury (terraformed) | −24 °C | +13 °C | −3 °C | −61 °C | +54 °C | 868 | 0.52 | 0.24 | 10.3% |
+| Mercury (terraformed)¹ | −24 °C | +13 °C | −3 °C | −61 °C | +54 °C | 868 | 0.52 | 0.24 | 10.3% |
 | Venus (default) | −44 °C | +390 °C | +389 °C | +386 °C | +392 °C | 624 | 0.78 | 0.97 | – |
 | Venus (terraformed) | −26 °C | +13 °C | −2 °C | −54 °C | +50 °C | 846 | 0.66 | 0.25 | 8.4% |
 | Earth (default) | −18 °C | +21 °C | +17 °C | +5 °C | +30 °C | 966 | 0.10 | 0.09 | 2.5% |
-| Moon¹ (vacuum) | −3 °C | +65 °C | +20 °C | −134 °C | +174 °C | 1,211 | 0.98 | 0.00 | – |
+| Moon² (vacuum) | −3 °C | +65 °C | +20 °C | −134 °C | +174 °C | 1,211 | 0.98 | 0.00 | – |
 | Moon (terraformed) | −33 °C | +13 °C | +11 °C | +5 °C | +18 °C | 755 | 0.06 | 0.25 | 1.0% |
 | Mars (default) | −63 °C | −63 °C | −92 °C | −194 °C | +9 °C | 440 | 0.83 | 0.00 | 0.6% |
 | Mars (terraformed) | −38 °C | +13 °C | +12 °C | +7 °C | +16 °C | 699 | 0.07 | 0.22 | 1.0% |
 
-_Terraformed: 1 atm (80% N₂ / 20% O₂ by mass, not counting water vapour), 105% ideal water. Flux and T_eq are the required values to sustain ~13 °C T_atm, not nominal at that distance. MirrorRedist = 0.5._  
-¹ The Moon has a 24 h rotation period in-game.
+¹ Terraformed: 1 atm (80% N₂ / 20% O₂ by mass, not counting water vapour), 105% ideal water. Flux and T_eq are the required values to sustain ~13 °C T_atm, not nominal at that distance. MirrorRedist = 0.5. 
+
+
+² The Moon has a 24 h rotation period in-game.
 
 ## Alternative Mirror Model
 
@@ -232,9 +238,9 @@ With `MirrorAreaMkm2 = 40` (default):
 | Mars | 3,396 | 36.2 | +110.4% |
 | Titan | 2,575 | 20.8 | +192.1% |
 | Venus | 6,052 | 115.1 | +34.8% |
-| Ceres | 455 | 0.65 | +6,153%² |
+| Ceres | 455 | 0.65 | +6,153%³ |
 
-² Yes, this would fry Ceres. Reduce `MirrorAreaMkm2` in config and use Teddit patcher to make mirrors cheaper if you want to use mirrors on it. A better solution for small targets may come later.
+³ Yes, this would fry Ceres. Reduce `MirrorAreaMkm2` in config and use Teddit patcher to make mirrors cheaper if you want to use mirrors on it. A better solution for small targets may come later.
 
 ## Configuration
 
