@@ -43,17 +43,24 @@ namespace AlternativeHabitabilityModel
             }
         }
 
-        static void Postfix(SpaceMirrorOrShadeFacility __instance, ObjectInfo objectInfo, ref double? __result)
+        static bool Prefix(SpaceMirrorOrShadeFacility __instance, ObjectInfo objectInfo, ref double? __result)
         {
-            if (__result == null) return;
-
             // Only affect mirrors, not shades
-            if (!__instance.IsMirror()) return;
+            if (!__instance.IsMirror()) return true;
 
-            // Get allocatedCount for this target
-            long allocatedCount = __instance.Targets.FirstOrDefault(t => t.target.Object == objectInfo)?.allocatedCount ?? 0;
+            // Find the target entry — null means this object isn't a valid target
+            var mirrorTargetInfo = __instance.Targets.FirstOrDefault(t => t.target.Object == objectInfo);
+            if (mirrorTargetInfo == null)
+            {
+                UnityEngine.Debug.LogError($"[AltMirror] Object {objectInfo.ObjectName} is not a target for {__instance.ObjectInfoData.ObjectInfo.ObjectName}");
+                objectInfo.SpaceMirrorsAndShadesTargetingThisObject.Remove(__instance);
+                __result = null;
+                return false;
+            }
 
-            if (allocatedCount <= 0) return;
+            long allocatedCount = mirrorTargetInfo.allocatedCount;
+
+            if (allocatedCount <= 0) { __result = 0.0; return false; }
 
             string origin = __instance.ObjectInfoData?.ObjectInfo?.ObjectName ?? "?";
 
@@ -65,7 +72,7 @@ namespace AlternativeHabitabilityModel
             {
                 Plugin.Log?.LogDebug($"[AltMirror] {origin}→{objectInfo.ObjectName} sys mismatch {mirrorRoot?.ObjectName ?? "?"}≠{targetRoot?.ObjectName ?? "?"} — skip");
                 __result = 0.0;
-                return;
+                return false;
             }
 
             // ── Planet radius for AltMirror formula ───────────────────────────
@@ -77,6 +84,7 @@ namespace AlternativeHabitabilityModel
             // AltMirror strength: A / (π × R²) per allocated station
             double alt = A_mirror / (Math.PI * radiusM * radiusM) * allocatedCount;
             __result = alt;
+            return false;
         }
     }
 }
