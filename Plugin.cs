@@ -45,7 +45,7 @@ namespace AlternativeHabitabilityModel
                 "MirrorAreaMkm2",
                 40.0,
                 new ConfigDescription(
-                    "Mirror area in million km². Default 40.",
+                    "Mirror area in million km².",
                     new AcceptableValueRange<double>(0.1, 10000.0)));
 
             UpdateAverageTemperature = Config.Bind(
@@ -59,7 +59,7 @@ namespace AlternativeHabitabilityModel
                 "MirrorRedist",
                 0.5,
                 new ConfigDescription(
-                    "Fraction of mirror output redirected to the night side. Range 0.0–1.0. Default 0.5.",
+                    "Fraction of mirror output redirected to the night side.",
                     new AcceptableValueRange<double>(0.0, 1.0)));
 
             TransportPower = Config.Bind(
@@ -67,7 +67,7 @@ namespace AlternativeHabitabilityModel
                 "TransportPower",
                 250.0,
                 new ConfigDescription(
-                    "Maximum atmospheric heat transport at 1 atm for N₂/O₂ atmosphere (W/m²). Default 250.",
+                    "Maximum atmospheric heat transport at 1 atm for N₂/O₂ atmosphere (W/m²).",
                     new AcceptableValueRange<double>(0.0, 10000.0)));
 
             NormalHeatDepth = Config.Bind(
@@ -75,7 +75,7 @@ namespace AlternativeHabitabilityModel
                 "NormalHeatDepth",
                 0.5,
                 new ConfigDescription(
-                    "Ocean diurnal mixing depth at 1-day rotation (metres). Default 0.5.",
+                    "Ocean diurnal mixing depth at 1-day rotation (metres).",
                     new AcceptableValueRange<double>(0.0, 1000.0)));
 
             NightFloor = Config.Bind(
@@ -83,7 +83,7 @@ namespace AlternativeHabitabilityModel
                 "NightFloor",
                 0.75,
                 new ConfigDescription(
-                    "Fractional cold-side drop below T_eq in the vacuum limit. Default 0.75.",
+                    "Fractional cold-side drop below T_eq in the vacuum limit.",
                     new AcceptableValueRange<double>(0.0, 1.0)));
 
             BaseRockHC = Config.Bind(
@@ -91,7 +91,7 @@ namespace AlternativeHabitabilityModel
                 "BaseRockHC",
                 50000.0,
                 new ConfigDescription(
-                    "Rock heat capacity at 1-day rotation (J/m²·K). Default 50000.",
+                    "Rock heat capacity at 1-day rotation (J/m²·K).",
                     new AcceptableValueRange<double>(1000.0, 1e8)));
 
             Log.LogInfo("AlternativeHabitabilityModel loaded.");
