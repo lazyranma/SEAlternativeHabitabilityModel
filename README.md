@@ -1,8 +1,8 @@
 # Alternative Habitability Model
 BepInEx plugin for Solar Expanse with two independently-toggleable model replacements:
 
-- **Alternative Swing Model** — replaces the vanilla day/night temperature swing with a physically-grounded asymmetric model.
-- **Alternative Mirror Model** — replaces the vanilla mirror strength formula with a physically realistic model where mirrors only affect their own planetary system.
+- **[Alternative Swing Model](#alternative-swing-model)** — replaces the vanilla day/night temperature swing with a physically-grounded asymmetric model.
+- **[Alternative Mirror Model](#alternative-mirror-model)** — replaces the vanilla mirror strength formula with a physically realistic model where mirrors only affect their own planetary system.
 
 Additional model replacements may be added in the future.
 
