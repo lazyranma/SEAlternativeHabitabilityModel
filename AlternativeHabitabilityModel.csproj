@@ -6,7 +6,7 @@
     <LangVersion>8.0</LangVersion>
     <AssemblyName>AlternativeHabitabilityModel</AssemblyName>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <PluginVersion>0.1.1</PluginVersion>
+    <PluginVersion>0.2.0</PluginVersion>
     <AssemblyVersion>$(PluginVersion)</AssemblyVersion>
     <FileVersion>$(PluginVersion)</FileVersion>
     <InformationalVersion>$(PluginVersion)</InformationalVersion>
