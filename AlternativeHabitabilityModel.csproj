@@ -43,6 +43,9 @@
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(_StageRoot)AlternativeHabitabilityModel\" />
     <ZipDirectory SourceDirectory="$(_StageRoot)" DestinationFile="$(OutputPath)AlternativeHabitabilityModel_v$(PluginVersion).zip" Overwrite="true" />
     <RemoveDir Directories="$(_StageRoot)" />
+
+    <MakeDir Directories="$(GameDir)\BepInEx\plugins\AlternativeHabitabilityModel\" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(GameDir)\BepInEx\plugins\AlternativeHabitabilityModel\" Retries="0" ContinueOnError="true" />
   </Target>
 
 </Project>
