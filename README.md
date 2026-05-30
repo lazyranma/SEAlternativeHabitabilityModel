@@ -246,7 +246,7 @@ With `MirrorAreaMkm2 = 40` (default):
 ## Alternative Scaling Model
 
 Disabled by default.\
-This model replaces the game's exponential formulas with linear
+This model replaces the game's exponential pressure and water formulas with linear
 relationships. Earth's atmosphere and ocean masses are used as reference
 points, so `GasScaling=1` and `WaterScaling=1` produce the same pressure
 and water score as vanilla for Earth with default deposits.
@@ -282,22 +282,34 @@ To convert an *existing save* to the linear model:
 
 On first launch a config file is generated at `BepInEx/config/com.lazyranma.althabitabilitymodel.cfg`:
 
-| Key | Section | Type | Default | Description |
-|---|---|---|---|---|
-| `AlternativeSwingModel` | Temperature | bool | true | Enable the alternative temperature swing model. |
-| `AlternativeMirrorModel` | Temperature | bool | true | Enable the alternative mirror model. |
-| `MirrorAreaMkm2` | Temperature | double | 40 | Mirror area in million km². |
-| `UpdateAverageTemperature` | Temperature | bool | false | When enabled, average temperature = (Min+Max)/2. |
-| `MirrorRedist` | Temperature | double | 0.5 | Fraction of mirror output to night side (0–1). |
-| `TransportPower` | Temperature | double | 250 | Max atmospheric transport at 1 atm N₂/O₂ (W/m²). |
-| `NormalHeatDepth` | Temperature | double | 0.5 | Ocean mixing depth at 1-day rotation (m). |
-| `NightFloor` | Temperature | double | 0.75 | Fractional cold-side drop. |
-| `BaseRockHC` | Temperature | double | 50000 | Rock HC at 1-day rotation (J/m²·K). |
-| `AlternativeScalingModel` | Scaling | bool | false | Replace exponential scaling with linear (direct multipliers). |
-| `ScaleDeposits` | Scaling | bool | true | Rescale initial deposits for the linear model (new games only). |
-| `ScaleDepositsOnLoadingSave` | Scaling | bool | false | One-shot: rescale deposits on save load. Enable, load, save, disable. |
-| `GasScaling` | Scaling | double | 1.0 | Multiplier for linear pressure. 1.0 = Earth unchanged. |
-| `WaterScaling` | Scaling | double | 1.0 | Multiplier for linear water. 1.0 = Earth unchanged. |
+### [Swing] section
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `AlternativeSwingModel` | bool | true | Enable the alternative temperature swing model. |
+| `UpdateAverageTemperature` | bool | false | When enabled, average temperature = (Min+Max)/2. |
+| `MirrorRedist` | double | 0.5 | Fraction of mirror output to night side (0–1). |
+| `TransportPower` | double | 250 | Max atmospheric transport at 1 atm N₂/O₂ (W/m²). |
+| `NormalHeatDepth` | double | 0.5 | Ocean mixing depth at 1-day rotation (m). |
+| `NightFloor` | double | 0.75 | Fractional cold-side drop. |
+| `BaseRockHC` | double | 50000 | Rock HC at 1-day rotation (J/m²·K). |
+
+### [Mirror] section
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `AlternativeMirrorModel` | bool | true | Enable the alternative mirror model. |
+| `MirrorAreaMkm2` | double | 40 | Mirror area in million km². |
+
+### [Scaling] section
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `AlternativeScalingModel` | bool | false | Enable the alternative scaling model. |
+| `ScaleDeposits` | bool | true | Rescale initial deposits for the linear model (new games only). |
+| `ScaleDepositsOnLoadingSave` | bool | false | Rescale deposits on save load. Enable, load, save, disable. |
+| `GasScaling` | double | 1.0 | Multiplier for linear pressure. |
+| `WaterScaling` | double | 1.0 | Multiplier for linear water. |
 
 ## Installation
 

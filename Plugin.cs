@@ -36,19 +36,19 @@ namespace AlternativeHabitabilityModel
             Log = Logger;
 
             AlternativeSwingModel = Config.Bind(
-                "Temperature",
+                "Swing",
                 "AlternativeSwingModel",
                 true,
                 "Enable the alternative temperature swing model.");
 
             AlternativeMirrorModel = Config.Bind(
-                "Temperature",
+                "Mirror",
                 "AlternativeMirrorModel",
                 true,
                 "Enable the alternative mirror model.");
 
             MirrorAreaMkm2 = Config.Bind(
-                "Temperature",
+                "Mirror",
                 "MirrorAreaMkm2",
                 40.0,
                 new ConfigDescription(
@@ -56,13 +56,13 @@ namespace AlternativeHabitabilityModel
                     new AcceptableValueRange<double>(0.1, 10000.0)));
 
             UpdateAverageTemperature = Config.Bind(
-                "Temperature",
+                "Swing",
                 "UpdateAverageTemperature",
                 false,
                 "When enabled, the average temperature is recalculated to (Min+Max)/2. When disabled, the game's original average temperature is kept and Min/Max are asymmetric.");
 
             MirrorRedist = Config.Bind(
-                "Temperature",
+                "Swing",
                 "MirrorRedist",
                 0.5,
                 new ConfigDescription(
@@ -70,7 +70,7 @@ namespace AlternativeHabitabilityModel
                     new AcceptableValueRange<double>(0.0, 1.0)));
 
             TransportPower = Config.Bind(
-                "Temperature",
+                "Swing",
                 "TransportPower",
                 250.0,
                 new ConfigDescription(
@@ -78,7 +78,7 @@ namespace AlternativeHabitabilityModel
                     new AcceptableValueRange<double>(0.0, 10000.0)));
 
             NormalHeatDepth = Config.Bind(
-                "Temperature",
+                "Swing",
                 "NormalHeatDepth",
                 0.5,
                 new ConfigDescription(
@@ -86,7 +86,7 @@ namespace AlternativeHabitabilityModel
                     new AcceptableValueRange<double>(0.0, 1000.0)));
 
             NightFloor = Config.Bind(
-                "Temperature",
+                "Swing",
                 "NightFloor",
                 0.75,
                 new ConfigDescription(
@@ -94,7 +94,7 @@ namespace AlternativeHabitabilityModel
                     new AcceptableValueRange<double>(0.0, 1.0)));
 
             BaseRockHC = Config.Bind(
-                "Temperature",
+                "Swing",
                 "BaseRockHC",
                 50000.0,
                 new ConfigDescription(
