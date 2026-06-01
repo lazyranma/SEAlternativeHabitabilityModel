@@ -1,0 +1,42 @@
+AltComp.Header,组成
+AltComp.NoAtmosphere,无大气层。
+AltComp.Label.O2,O₂
+AltComp.Label.CO2,CO₂
+AltComp.Label.N2Ar,N₂+Ar
+AltComp.Ideal.Range,理想: {0} – {1} atm
+AltComp.Ideal.Less,理想: < {0} atm
+AltComp.Ideal.EqLess,理想: < {0} atm eq.
+AltComp.Rating.O2.Dangerous,危险
+AltComp.Rating.O2.Poor,较差
+AltComp.Rating.O2.Marginal,勉强
+AltComp.Rating.O2.Good,良好
+AltComp.Rating.O2.Optimal,最佳
+AltComp.Rating.O2.Elevated,偏高
+AltComp.Rating.O2.Toxic,有毒
+AltComp.Rating.O2.Lethal,致命
+AltComp.Rating.CO2.Safe,安全
+AltComp.Rating.CO2.Elevated,偏高
+AltComp.Rating.CO2.Poor,较差
+AltComp.Rating.CO2.Hazardous,有害
+AltComp.Rating.CO2.Dangerous,危险
+AltComp.Rating.CO2.Lethal,致命
+AltComp.Rating.Narc.Safe,安全
+AltComp.Rating.Narc.Mild,轻微
+AltComp.Rating.Narc.Moderate,中等
+AltComp.Rating.Narc.Severe,严重
+AltComp.Rating.Narc.Incapacitating,致残
+AltComp.Equip.Breathable,可呼吸
+AltComp.Equip.O2MaskRec,建议佩戴氧气面罩
+AltComp.Equip.O2MaskReq,需要佩戴氧气面罩
+AltComp.Equip.AirProcRec,建议空气处理
+AltComp.Equip.AirProcReq,需要空气处理
+AltComp.Equip.SuitBreathable,航天服 — 气体可呼吸
+AltComp.Equip.SuitAirProc,航天服 + 空气处理
+AltComp.Equip.SuitSupplied,航天服 + 供气
+AltComp.Equip.ClosedCircuit,闭路生命维持系统
+AltComp.Score,评分: {0}%
+AltComp.ScoreHint,— {0}
+AltComp.Unit.Atm,atm
+AltComp.Unit.AtmEq,atm eq.
+AltComp.Unit.Pct,%
+AltComp.Format.PpLine,{0} {1} ({2}{3})  {4}

@@ -1,0 +1,42 @@
+AltComp.Header,구성
+AltComp.NoAtmosphere,대기 없음
+AltComp.Label.O2,O₂
+AltComp.Label.CO2,CO₂
+AltComp.Label.N2Ar,N₂+Ar
+AltComp.Ideal.Range,이상: {0} – {1} atm
+AltComp.Ideal.Less,이상: < {0} atm
+AltComp.Ideal.EqLess,이상: < {0} atm 환산
+AltComp.Rating.O2.Dangerous,위험
+AltComp.Rating.O2.Poor,불량
+AltComp.Rating.O2.Marginal,한계
+AltComp.Rating.O2.Good,양호
+AltComp.Rating.O2.Optimal,최적
+AltComp.Rating.O2.Elevated,고농도
+AltComp.Rating.O2.Toxic,유독
+AltComp.Rating.O2.Lethal,치명적
+AltComp.Rating.CO2.Safe,안전
+AltComp.Rating.CO2.Elevated,고농도
+AltComp.Rating.CO2.Poor,불량
+AltComp.Rating.CO2.Hazardous,유해
+AltComp.Rating.CO2.Dangerous,위험
+AltComp.Rating.CO2.Lethal,치명적
+AltComp.Rating.Narc.Safe,안전
+AltComp.Rating.Narc.Mild,경미
+AltComp.Rating.Narc.Moderate,중간
+AltComp.Rating.Narc.Severe,심각
+AltComp.Rating.Narc.Incapacitating,무력화
+AltComp.Equip.Breathable,호흡 가능
+AltComp.Equip.O2MaskRec,산소 마스크 권장
+AltComp.Equip.O2MaskReq,산소 마스크 필수
+AltComp.Equip.AirProcRec,공기 처리 권장
+AltComp.Equip.AirProcReq,공기 처리 필수
+AltComp.Equip.SuitBreathable,우주복 — 혼합기 호흡 가능
+AltComp.Equip.SuitAirProc,우주복 + 공기 처리
+AltComp.Equip.SuitSupplied,우주복 + 공기 공급
+AltComp.Equip.ClosedCircuit,폐쇄식 생명 유지
+AltComp.Score,점수: {0}%
+AltComp.ScoreHint,— {0}
+AltComp.Unit.Atm,atm
+AltComp.Unit.AtmEq,atm 환산
+AltComp.Unit.Pct,%
+AltComp.Format.PpLine,{0} {1} ({2}{3})  {4}

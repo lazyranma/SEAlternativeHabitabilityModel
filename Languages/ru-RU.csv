@@ -1,0 +1,42 @@
+AltComp.Header,СОСТАВ
+AltComp.NoAtmosphere,Атмосфера отсутствует.
+AltComp.Label.O2,O₂
+AltComp.Label.CO2,CO₂
+AltComp.Label.N2Ar,N₂+Ar
+AltComp.Ideal.Range,Идеально: {0} – {1} атм
+AltComp.Ideal.Less,Идеально: < {0} атм
+AltComp.Ideal.EqLess,Идеально: < {0} атм экв.
+AltComp.Rating.O2.Dangerous,Опасно
+AltComp.Rating.O2.Poor,Плохо
+AltComp.Rating.O2.Marginal,Приемлемо
+AltComp.Rating.O2.Good,Хорошо
+AltComp.Rating.O2.Optimal,Оптимально
+AltComp.Rating.O2.Elevated,Повышено
+AltComp.Rating.O2.Toxic,Токсично
+AltComp.Rating.O2.Lethal,Смертельно
+AltComp.Rating.CO2.Safe,Безопасно
+AltComp.Rating.CO2.Elevated,Повышено
+AltComp.Rating.CO2.Poor,Плохо
+AltComp.Rating.CO2.Hazardous,Опасно
+AltComp.Rating.CO2.Dangerous,Крайне опасно
+AltComp.Rating.CO2.Lethal,Смертельно
+AltComp.Rating.Narc.Safe,Безопасно
+AltComp.Rating.Narc.Mild,Лёгкое
+AltComp.Rating.Narc.Moderate,Умеренное
+AltComp.Rating.Narc.Severe,Сильное
+AltComp.Rating.Narc.Incapacitating,Обездвиживающее
+AltComp.Equip.Breathable,Пригоден для дыхания
+AltComp.Equip.O2MaskRec,Рекомендована кислородная маска
+AltComp.Equip.O2MaskReq,Требуется кислородная маска
+AltComp.Equip.AirProcRec,Рекомендована обработка воздуха
+AltComp.Equip.AirProcReq,Требуется обработка воздуха
+AltComp.Equip.SuitBreathable,Скафандр — смесь пригодна для дыхания
+AltComp.Equip.SuitAirProc,Скафандр + обработка воздуха
+AltComp.Equip.SuitSupplied,Скафандр + подача воздуха
+AltComp.Equip.ClosedCircuit,Замкнутая система жизнеобеспечения
+AltComp.Score,Оценка: {0}%
+AltComp.ScoreHint,— {0}
+AltComp.Unit.Atm,атм
+AltComp.Unit.AtmEq,атм экв.
+AltComp.Unit.Pct,%
+AltComp.Format.PpLine,{0} {1} ({2}{3})  {4}

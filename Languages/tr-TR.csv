@@ -1,0 +1,42 @@
+AltComp.Header,BİLEŞİM
+AltComp.NoAtmosphere,Atmosfer yok.
+AltComp.Label.O2,O₂
+AltComp.Label.CO2,CO₂
+AltComp.Label.N2Ar,N₂+Ar
+AltComp.Ideal.Range,İdeal: {0} – {1} atm
+AltComp.Ideal.Less,İdeal: < {0} atm
+AltComp.Ideal.EqLess,İdeal: < {0} atm eşd.
+AltComp.Rating.O2.Dangerous,Tehlikeli
+AltComp.Rating.O2.Poor,Kötü
+AltComp.Rating.O2.Marginal,Sınırda
+AltComp.Rating.O2.Good,İyi
+AltComp.Rating.O2.Optimal,Optimal
+AltComp.Rating.O2.Elevated,Yüksek
+AltComp.Rating.O2.Toxic,Toksik
+AltComp.Rating.O2.Lethal,Ölümcül
+AltComp.Rating.CO2.Safe,Güvenli
+AltComp.Rating.CO2.Elevated,Yüksek
+AltComp.Rating.CO2.Poor,Kötü
+AltComp.Rating.CO2.Hazardous,Tehlikeli
+AltComp.Rating.CO2.Dangerous,Çok tehlikeli
+AltComp.Rating.CO2.Lethal,Ölümcül
+AltComp.Rating.Narc.Safe,Güvenli
+AltComp.Rating.Narc.Mild,Hafif
+AltComp.Rating.Narc.Moderate,Orta
+AltComp.Rating.Narc.Severe,Şiddetli
+AltComp.Rating.Narc.Incapacitating,Hareketsiz bırakan
+AltComp.Equip.Breathable,Solunabilir
+AltComp.Equip.O2MaskRec,Oksijen maskesi önerilir
+AltComp.Equip.O2MaskReq,Oksijen maskesi gerekli
+AltComp.Equip.AirProcRec,Hava işleme önerilir
+AltComp.Equip.AirProcReq,Hava işleme gerekli
+AltComp.Equip.SuitBreathable,Basınç giysisi — karışım solunabilir
+AltComp.Equip.SuitAirProc,Basınç giysisi + hava işleme
+AltComp.Equip.SuitSupplied,Basınç giysisi + hava beslemesi
+AltComp.Equip.ClosedCircuit,Kapalı devre yaşam desteği
+AltComp.Score,Puan: {0}%
+AltComp.ScoreHint,— {0}
+AltComp.Unit.Atm,atm
+AltComp.Unit.AtmEq,atm eşd.
+AltComp.Unit.Pct,%
+AltComp.Format.PpLine,{0} {1} ({2}{3})  {4}

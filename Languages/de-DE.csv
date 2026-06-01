@@ -1,0 +1,42 @@
+AltComp.Header,ZUSAMMENSETZUNG
+AltComp.NoAtmosphere,Keine Atmosphäre.
+AltComp.Label.O2,O₂
+AltComp.Label.CO2,CO₂
+AltComp.Label.N2Ar,N₂+Ar
+AltComp.Ideal.Range,Ideal: {0} – {1} atm
+AltComp.Ideal.Less,Ideal: < {0} atm
+AltComp.Ideal.EqLess,Ideal: < {0} atm äq.
+AltComp.Rating.O2.Dangerous,Gefährlich
+AltComp.Rating.O2.Poor,Schlecht
+AltComp.Rating.O2.Marginal,Grenzwertig
+AltComp.Rating.O2.Good,Gut
+AltComp.Rating.O2.Optimal,Optimal
+AltComp.Rating.O2.Elevated,Erhöht
+AltComp.Rating.O2.Toxic,Toxisch
+AltComp.Rating.O2.Lethal,Tödlich
+AltComp.Rating.CO2.Safe,Sicher
+AltComp.Rating.CO2.Elevated,Erhöht
+AltComp.Rating.CO2.Poor,Schlecht
+AltComp.Rating.CO2.Hazardous,Gesundheitsschädlich
+AltComp.Rating.CO2.Dangerous,Gefährlich
+AltComp.Rating.CO2.Lethal,Tödlich
+AltComp.Rating.Narc.Safe,Sicher
+AltComp.Rating.Narc.Mild,Leicht
+AltComp.Rating.Narc.Moderate,Mittel
+AltComp.Rating.Narc.Severe,Schwer
+AltComp.Rating.Narc.Incapacitating,Handlungsunfähig
+AltComp.Equip.Breathable,Atembar
+AltComp.Equip.O2MaskRec,Sauerstoffmaske empfohlen
+AltComp.Equip.O2MaskReq,Sauerstoffmaske erforderlich
+AltComp.Equip.AirProcRec,Luftaufbereitung empfohlen
+AltComp.Equip.AirProcReq,Luftaufbereitung erforderlich
+AltComp.Equip.SuitBreathable,Druckanzug — Mischung ist atembar
+AltComp.Equip.SuitAirProc,Druckanzug + Luftaufbereitung
+AltComp.Equip.SuitSupplied,Druckanzug + Atemluftversorgung
+AltComp.Equip.ClosedCircuit,Geschlossenes Lebenserhaltungssystem
+AltComp.Score,Bewertung: {0}%
+AltComp.ScoreHint,— {0}
+AltComp.Unit.Atm,atm
+AltComp.Unit.AtmEq,atm äq.
+AltComp.Unit.Pct,%
+AltComp.Format.PpLine,{0} {1} ({2}{3})  {4}

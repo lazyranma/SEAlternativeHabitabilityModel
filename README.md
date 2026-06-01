@@ -1,17 +1,17 @@
 # Alternative Habitability Model
-BepInEx plugin for Solar Expanse with three independently-toggleable model replacements:
+BepInEx plugin for Solar Expanse with five independently-toggleable model replacements:
 
 - **[Alternative Swing Model](#alternative-swing-model)** — replaces the vanilla day/night temperature swing with a physically-grounded asymmetric model.
 - **[Alternative Mirror Model](#alternative-mirror-model)** — replaces the vanilla mirror strength formula with a physically realistic model where mirrors only affect their own planetary system.
 - **[Alternative Scaling Model](#alternative-scaling-model)** — replaces the exponential atmosphere/ocean mass scaling with linear relationships using direct multipliers.
-
-Additional model replacements may be added in the future.
+- **[Alternative Composition Model](#alternative-composition-model)** — replaces the vanilla oxygen mass-fraction check with a partial-pressure breathability model that evaluates all gases.
+- **[Alternative Photochemistry Model](#alternative-photochemistry-model)** — adds hydrogen and methane photochemical oxidation and thermal combustion.
 
 > This project was developed with LLM assistance.
 
 ## Simulator
 
-Try the model live: [Terraforming Simulator](https://lazyranma.github.io/SETerraformingSimulator/altswing_altmirror.html)
+Try the model live: [Terraforming Simulator](https://lazyranma.github.io/SETerraformingSimulator/altswing_altmirror.html). Only Swing and Mirror models are supported so far.
 
 ## Alternative Swing Model
 
@@ -187,10 +187,10 @@ temperatureSwings  = (T_hot − T_cold) / 2               ← half-range (K)
 
 The goal is to replace the vanilla formula — which is physically unrealistic — with a model that respects real physics.
 
-| | Formula |
-|---|---|
-| Vanilla | `strength = 0.216 / (d_mirror² × d_diff²) × count` |
-| AltMirror | `strength = A / (π × R_planet²) × count` |
+```
+Vanilla:     strength = 0.216 / (d_mirror² × d_diff²) × count
+Alternative: strength = A / (π × R_planet²) × count
+```
 
 The model assumes mirrors are close enough to the target that all collected light hits. In practice this means the mirror must be within the same planetary system — the plugin enforces this by ignoring mirrors around other planets or in solar orbit. Mirror area A is configurable (`MirrorAreaMkm2`, default 40 million km²).
 
@@ -278,6 +278,104 @@ To convert an *existing save* to the linear model:
 3. Save the game.
 4. Disable `ScaleDepositsOnLoadingSave`.
 
+## Alternative Composition Model
+
+Replaces the vanilla breathability check — which only tests whether O₂ is at least 20% of atmosphere mass — with a partial-pressure-based model that asks: can humans actually breathe this air?
+
+Two breathing modes are evaluated, and the better score is chosen:
+
+- Ambient breathing — breathe the air as-is, outdoors. Absolute values of partial pressures are evaluated to determine breathability.
+- Pressure-suit breathing — a suit compresses or expands ambient air to 1 atm, preserving gas ratios. It receives a 50% penalty to the score, because you still need a suit. Very thin atmospheres (below 0.1 atm) give diminishing returns due to lack of ambient air to compress.
+
+### Key gases
+
+| Gas | Formula | Effect | Ideal range |
+|-----|---------|--------|-------------|
+| Oxygen | O₂ | Too low → hypoxia (headache, unconsciousness). Too high → hyperoxia (lung damage, convulsions). | 0.19–0.50 atm |
+| Carbon Dioxide | CO₂ | Elevated levels cause acidosis, impaired cognition, then death. | < 0.001 atm |
+| Nitrogen + Noble Gas | N₂, Ar | Inert at low pressure. Above ~2 atm they cause nitrogen narcosis (confusion, impaired judgement). Argon is 2.3× more narcotic than nitrogen. | < 2.0 atm eq. |
+| Helium-3, Hydrogen, Fuel | He-3, H₂, CH₄ | Diluents only — no toxicity or narcosis penalty. | — |
+
+Hover the habitability panel's composition icon to see all partial pressures with colour-coded ratings and an equipment recommendation.
+
+Note: Be aware that oxygen, carbon dioxide, fuel, and hydrogen have toxicity curves that penalize high concentrations relative to total above-ground deposit amounts via an independent toxicity score. The uranium curve, surprisingly, penalizes low concentrations instead.
+
+## Alternative Photochemistry Model
+
+Hydrogen and methane are not stable in an oxygen atmosphere. UV light from
+the star slowly breaks them down, and if the planet gets hot enough they
+ignite and burn. This model simulates that process.
+
+### Photochemical oxidation
+
+O₂ + UV → O₃ → O(¹D) → oxidizes H₂/CH₄ every monthly tick.
+
+Water vapor speeds up the breakdown.
+
+Earth reference lifetimes at 1 AU, 21% O₂, 1 atm, ~1% H₂O vapor:
+- H₂: ~2 years (4.1% per month)
+- CH₄: ~9 years (0.92% per month)
+
+Scaling:
+- Linear in O₂ partial pressure
+- Linear in UV flux (star luminosity / distance²), affected by mirrors and shades
+- Linear with water vapor amount, up to 40× at Earth humidity
+
+### Thermal combustion
+
+An atmosphere containing both fuel (H₂/CH₄) and oxygen can ignite and
+burn, consuming both to produce water vapour and CO₂.
+
+Three conditions control how much fuel burns each month:
+
+#### 1. Flammability
+
+The fuel-to-oxygen mole ratio must fall within a combustible window.
+These limits widen as temperature rises and vanish entirely at the
+autoignition point — at 500°C (H₂) or 580°C (CH₄) any ratio burns.
+
+Limits at room temperature:
+| Fuel | Mole ratio (fuel : oxygen) | Mass ratio (fuel : oxygen) |
+|------|:--:|:--:|
+| Hydrogen | 0.05:1 – 17:1   | 0.003:1 – 1.07:1 |
+| Fuel  | 0.25:1 – 0.84:1 | 0.13:1 – 0.42:1  |
+
+(At least 5% O₂ by mole fraction is also required, unless at
+autoignition where this check is skipped.)
+
+#### 2. Temperature
+
+Burn fraction per month follows a smooth S-curve controlled by
+`τ = Tmax / T_auto` (500°C for H₂, 580°C for CH₄).
+
+Below about 114°C (τ < 0.5) the atmosphere is effectively stable.
+Around 270°C ~5% of flammable fuel burns per month.
+At 384°C half the fuel ignites.
+At or above 500°C for H₂ (580°C for CH₄) everything ignites instantly and burns in a single tick.
+
+The burn below autoignition is possible due to temperature fluctuations
+or sparks, but is partial due to imperfect gas mixing and flame
+self-extinguishment as temperature drops toward nightfall.
+
+```
+Burn fraction = 1 / (1 + e^(−20 × (τ − 0.85)))
+```
+
+#### 3. Dilution
+
+A spark-ignited flame must heat the inert buffer gas (N₂, Ar, etc.) above
+~900 K to stay alive. If the atmosphere is too dilute, the flame
+self-extinguishes before consuming all the fuel.
+The dilution penalty depends on the reactive fraction — what
+percentage of the atmosphere is fuel + O₂, versus inert filler.
+As ambient temperature approaches autoignition, the buffer gas is already
+hot and the dilution penalty fades. At τ ≥ 1.0, it is skipped entirely.
+
+### Stoichiometry
+By mass:
+- 1 t H₂ + 8 t O₂ → 9 t H₂O
+- 1 t CH₄ + 4 t O₂ → 2.75 t CO₂ + 2.25 t H₂O
+
 ## Configuration
 
 On first launch a config file is generated at `BepInEx/config/com.lazyranma.althabitabilitymodel.cfg`:
@@ -310,6 +408,18 @@ On first launch a config file is generated at `BepInEx/config/com.lazyranma.alth
 | `ScaleDepositsOnLoadingSave` | bool | false | Rescale deposits on save load. Enable, load, save, disable. |
 | `GasScaling` | double | 1.0 | Multiplier for linear pressure. |
 | `WaterScaling` | double | 1.0 | Multiplier for linear water. |
+
+### [Composition] section
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `AlternativeCompositionModel` | bool | true | Enable the alternative composition model. |
+
+### [Photochemistry] section
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `AlternativePhotochemistryModel` | bool | true | Enable photochemical oxidation of H₂ and CH₄. |
 
 ## Installation
 

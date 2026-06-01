@@ -3,7 +3,11 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using System.IO;
+using System.Reflection;
+using Language;
 using Manager;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace AlternativeHabitabilityModel
@@ -18,6 +22,8 @@ namespace AlternativeHabitabilityModel
         internal static ConfigEntry<bool> AlternativeScalingModel;
         internal static ConfigEntry<bool> ScaleDeposits;
         internal static ConfigEntry<bool> ScaleDepositsOnLoadingSave;
+        internal static ConfigEntry<bool> AlternativeCompositionModel;
+        internal static ConfigEntry<bool> AlternativePhotochemistryModel;
         internal static ConfigEntry<bool> UpdateAverageTemperature;
         internal static ConfigEntry<double> MirrorRedist;
         internal static ConfigEntry<double> TransportPower;
@@ -101,6 +107,7 @@ namespace AlternativeHabitabilityModel
                     "Rock heat capacity at 1-day rotation (J/m²·K).",
                     new AcceptableValueRange<double>(1000.0, 1e8)));
 
+            // ── Scaling model ──
             AlternativeScalingModel = Config.Bind(
                 "Scaling",
                 "AlternativeScalingModel",
@@ -139,6 +146,20 @@ namespace AlternativeHabitabilityModel
                     "Multiplier for the linear water formula.\n" +
                     "1.0 = Earth unchanged. 2.0 = double water score at same mass.",
                     new AcceptableValueRange<double>(0.0000001, 1e6)));
+
+            // ── Composition model ──
+            AlternativeCompositionModel = Config.Bind(
+                "Composition",
+                "AlternativeCompositionModel",
+                true,
+                "Enable the alternative composition model.");
+
+            // ── Photochemistry model ──
+            AlternativePhotochemistryModel = Config.Bind(
+                "Photochemistry",
+                "AlternativePhotochemistryModel",
+                true,
+                "Enable photochemical oxidation of H₂ and CH₄ in O₂-bearing atmospheres.");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -182,6 +203,30 @@ namespace AlternativeHabitabilityModel
                 Log.LogInfo("Alternative Mirror Model enabled.");
             }
 
+            if (AlternativeCompositionModel.Value)
+            {
+                // Load custom localisation
+                LoadCompositionLocalisation();
+
+                // Replace vanilla composition curve with linear f(x)=100x
+                var h = SerializedMonoBehaviourSingleton<AllScriptableObjectManager>
+                    .Instance.TerraformationConfig.Habitability;
+                h.composition.curve = AnimationCurve.Linear(0f, 0f, 1f, 100f);
+
+                Patch(harmony, typeof(Patch_UpdateComposition));
+                Patch(harmony, typeof(Patch_FillInfo_Tooltip));
+                Patch(harmony, typeof(Patch_CompositionState_PropagateCtor));
+                Patch(harmony, typeof(Patch_CompositionState_PropagateOps));
+                Log.LogInfo("Alternative Composition Model enabled.");
+            }
+
+            if (AlternativePhotochemistryModel.Value)
+            {
+                Patch(harmony, typeof(Patch_AfterLoadState_Photochemistry));
+                Patch(harmony, typeof(Patch_UpdatePhotochemistry));
+                Log.LogInfo("Alternative Photochemistry Model enabled.");
+            }
+
             _patched = true;
         }
 
@@ -217,6 +262,32 @@ namespace AlternativeHabitabilityModel
             {
                 Log.LogError($"Failed to patch {type.FullName}: {ex.GetType().Name}: {ex.Message}");
                 Log.LogDebug($"{ex}");
+            }
+        }
+
+        private static void LoadCompositionLocalisation()
+        {
+            try
+            {
+                string langPath = Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                    "Languages");
+
+                if (!Directory.Exists(langPath))
+                {
+                    Log.LogWarning($"Composition localisation folder not found: {langPath}");
+                    return;
+                }
+
+                var leManager = MonoBehaviourSingleton<LEManager>.Instance;
+                leManager.laungageFiles.AddCustomTranslationFromPath(langPath);
+                leManager.AddCustomTranslation();
+
+                Log.LogInfo($"Loaded composition localisation from {langPath}");
+            }
+            catch (Exception ex)
+            {
+                Log.LogWarning($"Failed to load composition localisation: {ex.Message}");
             }
         }
     }

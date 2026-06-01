@@ -1,0 +1,42 @@
+AltComp.Header,COMPOSICIÓN
+AltComp.NoAtmosphere,Sin atmósfera.
+AltComp.Label.O2,O₂
+AltComp.Label.CO2,CO₂
+AltComp.Label.N2Ar,N₂+Ar
+AltComp.Ideal.Range,Ideal: {0} – {1} atm
+AltComp.Ideal.Less,Ideal: < {0} atm
+AltComp.Ideal.EqLess,Ideal: < {0} atm eq.
+AltComp.Rating.O2.Dangerous,Peligroso
+AltComp.Rating.O2.Poor,Pobre
+AltComp.Rating.O2.Marginal,Marginal
+AltComp.Rating.O2.Good,Bueno
+AltComp.Rating.O2.Optimal,Óptimo
+AltComp.Rating.O2.Elevated,Elevado
+AltComp.Rating.O2.Toxic,Tóxico
+AltComp.Rating.O2.Lethal,Letal
+AltComp.Rating.CO2.Safe,Seguro
+AltComp.Rating.CO2.Elevated,Elevado
+AltComp.Rating.CO2.Poor,Pobre
+AltComp.Rating.CO2.Hazardous,Nocivo
+AltComp.Rating.CO2.Dangerous,Peligroso
+AltComp.Rating.CO2.Lethal,Letal
+AltComp.Rating.Narc.Safe,Seguro
+AltComp.Rating.Narc.Mild,Leve
+AltComp.Rating.Narc.Moderate,Moderado
+AltComp.Rating.Narc.Severe,Severo
+AltComp.Rating.Narc.Incapacitating,Incapacitante
+AltComp.Equip.Breathable,Respirable
+AltComp.Equip.O2MaskRec,Máscara de oxígeno recomendada
+AltComp.Equip.O2MaskReq,Máscara de oxígeno obligatoria
+AltComp.Equip.AirProcRec,Procesamiento de aire recomendado
+AltComp.Equip.AirProcReq,Procesamiento de aire obligatorio
+AltComp.Equip.SuitBreathable,Traje presurizado — mezcla respirable
+AltComp.Equip.SuitAirProc,Traje presurizado + procesamiento de aire
+AltComp.Equip.SuitSupplied,Traje presurizado + suministro de aire
+AltComp.Equip.ClosedCircuit,Soporte vital de circuito cerrado
+AltComp.Score,Puntuación: {0}%
+AltComp.ScoreHint,— {0}
+AltComp.Unit.Atm,atm
+AltComp.Unit.AtmEq,atm eq.
+AltComp.Unit.Pct,%
+AltComp.Format.PpLine,{0} {1} ({2}{3})  {4}

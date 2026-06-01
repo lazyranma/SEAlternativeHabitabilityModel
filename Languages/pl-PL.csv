@@ -1,0 +1,42 @@
+AltComp.Header,SKŁAD
+AltComp.NoAtmosphere,Brak atmosfery.
+AltComp.Label.O2,O₂
+AltComp.Label.CO2,CO₂
+AltComp.Label.N2Ar,N₂+Ar
+AltComp.Ideal.Range,Idealnie: {0} – {1} atm
+AltComp.Ideal.Less,Idealnie: < {0} atm
+AltComp.Ideal.EqLess,Idealnie: < {0} atm ekw.
+AltComp.Rating.O2.Dangerous,Niebezpiecznie
+AltComp.Rating.O2.Poor,Słabo
+AltComp.Rating.O2.Marginal,Granicznie
+AltComp.Rating.O2.Good,Dobrze
+AltComp.Rating.O2.Optimal,Optymalnie
+AltComp.Rating.O2.Elevated,Podwyższone
+AltComp.Rating.O2.Toxic,Toksyczne
+AltComp.Rating.O2.Lethal,Śmiertelne
+AltComp.Rating.CO2.Safe,Bezpiecznie
+AltComp.Rating.CO2.Elevated,Podwyższone
+AltComp.Rating.CO2.Poor,Słabo
+AltComp.Rating.CO2.Hazardous,Niebezpiecznie
+AltComp.Rating.CO2.Dangerous,Bardzo niebezpiecznie
+AltComp.Rating.CO2.Lethal,Śmiertelne
+AltComp.Rating.Narc.Safe,Bezpiecznie
+AltComp.Rating.Narc.Mild,Łagodna
+AltComp.Rating.Narc.Moderate,Umiarkowana
+AltComp.Rating.Narc.Severe,Silna
+AltComp.Rating.Narc.Incapacitating,Obezwładniająca
+AltComp.Equip.Breathable,Zdatny do oddychania
+AltComp.Equip.O2MaskRec,Zalecana maska tlenowa
+AltComp.Equip.O2MaskReq,Wymagana maska tlenowa
+AltComp.Equip.AirProcRec,Zalecane oczyszczanie powietrza
+AltComp.Equip.AirProcReq,Wymagane oczyszczanie powietrza
+AltComp.Equip.SuitBreathable,Skafander — mieszanka zdatna do oddychania
+AltComp.Equip.SuitAirProc,Skafander + oczyszczanie powietrza
+AltComp.Equip.SuitSupplied,Skafander + dopływ powietrza
+AltComp.Equip.ClosedCircuit,Zamknięty obieg podtrzymywania życia
+AltComp.Score,Ocena: {0}%
+AltComp.ScoreHint,— {0}
+AltComp.Unit.Atm,atm
+AltComp.Unit.AtmEq,atm ekw.
+AltComp.Unit.Pct,%
+AltComp.Format.PpLine,{0} {1} ({2}{3})  {4}

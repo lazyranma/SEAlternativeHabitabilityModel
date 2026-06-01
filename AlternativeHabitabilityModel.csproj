@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <AssemblyName>AlternativeHabitabilityModel</AssemblyName>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <PluginVersion>0.2.0</PluginVersion>
@@ -20,6 +20,7 @@
     <Reference Include="UnityEngine"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\UnityEngine.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Assembly-CSharp"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UI"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Sirenix.Serialization"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\Sirenix.Serialization.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
 
@@ -41,11 +42,18 @@
     <RemoveDir Directories="$(_StageRoot)" />
     <MakeDir Directories="$(_StageRoot)AlternativeHabitabilityModel\" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(_StageRoot)AlternativeHabitabilityModel\" />
+
+    <ItemGroup>
+      <LangFiles Include="Languages\*.csv" />
+    </ItemGroup>
+    <Copy SourceFiles="@(LangFiles)" DestinationFolder="$(_StageRoot)AlternativeHabitabilityModel\Languages\" />
+
     <ZipDirectory SourceDirectory="$(_StageRoot)" DestinationFile="$(OutputPath)AlternativeHabitabilityModel_v$(PluginVersion).zip" Overwrite="true" />
     <RemoveDir Directories="$(_StageRoot)" />
 
     <MakeDir Directories="$(GameDir)\BepInEx\plugins\AlternativeHabitabilityModel\" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(GameDir)\BepInEx\plugins\AlternativeHabitabilityModel\" Retries="0" ContinueOnError="true" />
+    <Copy SourceFiles="@(LangFiles)" DestinationFolder="$(GameDir)\BepInEx\plugins\AlternativeHabitabilityModel\Languages\" Retries="0" ContinueOnError="true" />
   </Target>
 
 </Project>

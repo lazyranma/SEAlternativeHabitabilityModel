@@ -1,0 +1,42 @@
+AltComp.Header,COMPOSITION
+AltComp.NoAtmosphere,No atmosphere.
+AltComp.Label.O2,O₂
+AltComp.Label.CO2,CO₂
+AltComp.Label.N2Ar,N₂+Ar
+AltComp.Ideal.Range,Ideal: {0} – {1} atm
+AltComp.Ideal.Less,Ideal: < {0} atm
+AltComp.Ideal.EqLess,Ideal: < {0} atm eq.
+AltComp.Rating.O2.Dangerous,Dangerous
+AltComp.Rating.O2.Poor,Poor
+AltComp.Rating.O2.Marginal,Marginal
+AltComp.Rating.O2.Good,Good
+AltComp.Rating.O2.Optimal,Optimal
+AltComp.Rating.O2.Elevated,Elevated
+AltComp.Rating.O2.Toxic,Toxic
+AltComp.Rating.O2.Lethal,Lethal
+AltComp.Rating.CO2.Safe,Safe
+AltComp.Rating.CO2.Elevated,Elevated
+AltComp.Rating.CO2.Poor,Poor
+AltComp.Rating.CO2.Hazardous,Hazardous
+AltComp.Rating.CO2.Dangerous,Dangerous
+AltComp.Rating.CO2.Lethal,Lethal
+AltComp.Rating.Narc.Safe,Safe
+AltComp.Rating.Narc.Mild,Mild
+AltComp.Rating.Narc.Moderate,Moderate
+AltComp.Rating.Narc.Severe,Severe
+AltComp.Rating.Narc.Incapacitating,Incapacitating
+AltComp.Equip.Breathable,Breathable
+AltComp.Equip.O2MaskRec,Oxygen mask recommended
+AltComp.Equip.O2MaskReq,Oxygen mask required
+AltComp.Equip.AirProcRec,Air processing recommended
+AltComp.Equip.AirProcReq,Air processing required
+AltComp.Equip.SuitBreathable,Pressure suit — mix is breathable
+AltComp.Equip.SuitAirProc,Pressure suit + air processing
+AltComp.Equip.SuitSupplied,Pressure suit + supplied air
+AltComp.Equip.ClosedCircuit,Closed-circuit life support
+AltComp.Score,Score: {0}%
+AltComp.ScoreHint,— {0}
+AltComp.Unit.Atm,atm
+AltComp.Unit.AtmEq,atm eq.
+AltComp.Unit.Pct,%
+AltComp.Format.PpLine,{0} {1} ({2}{3})  {4}
