@@ -18,7 +18,6 @@ namespace AlternativeHabitabilityModel
         public const double MIN_KELWIN = -273.15;
 
         public const double DAY_CEILING = 0.414;
-        public const double NIGHT_FLOOR = 0.75;
         public const double TRANSPORT_REF = 100000.0;
 
         // Asymmetric mode state — keyed by HabitabilityParametersNew instance
@@ -47,6 +46,7 @@ namespace AlternativeHabitabilityModel
             double starLum   = MonoBehaviourSingleton<ObjectInfoManager>.Instance.mainObjectInfoSun.StarType.luminosity;
             double mirrorR   = Plugin.MirrorRedist.Value;
             double transpPwr = Plugin.TransportPower.Value;
+            double nightFloor = Plugin.NightFloor.Value;
 
             // ── 1. Flux splitting ────────────────────────────────────
             double L         = solarFlux * starLum;
@@ -78,7 +78,7 @@ namespace AlternativeHabitabilityModel
 
             // ── 6. Vacuum extremes ───────────────────────────────────
             double T_dayGh   = T_eq * (1.0 + DAY_CEILING * contrast * fRot) + (T_atm - T_eq);
-            double T_nightGh = T_eq * (1.0 - NIGHT_FLOOR * contrast * fRot) + (T_atm - T_eq);
+            double T_nightGh = T_eq * (1.0 - nightFloor * contrast * fRot) + (T_atm - T_eq);
 
             // ── 7. Atmospheric heat transport ────────────────────────
             double columnMass        = pressure > 0 ? pressure * 101325.0 / Math.Max(gravity, 1e-10) : 0.0;
