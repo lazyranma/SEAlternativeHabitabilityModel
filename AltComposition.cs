@@ -366,7 +366,7 @@ namespace AlternativeHabitabilityModel
         static string fmtLine(double ppVal, string ppFmt, string unit,
             double molFrac, string rating, string color)
         {
-            var ci = System.Globalization.CultureInfo.InvariantCulture;
+            var ci = LEManager.GetCultureInfo();
             return string.Format(L("AltComp.Format.PpLine"),
                 ppVal.ToString(ppFmt, ci),
                 unit,
