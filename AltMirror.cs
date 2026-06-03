@@ -1,23 +1,171 @@
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Data;
 using Game.Info;
 using Game.ObjectInfoDataScripts.CustomFacilitiesAndModules;
+using Game.UI.Windows.Elements.MirrorTargetElements;
+using Game.UI.Windows.Windows;
 using HarmonyLib;
+using Manager;
+using TMPro;
+using UnityEngine;
 
 #pragma warning disable IDE0051
 
 namespace AlternativeHabitabilityModel
 {
     /// <summary>
-    /// Harmony patch that replaces the vanilla mirror strength formula with
-    /// a physically-grounded planet-orbiting mirror model (Regime B, f_coupling=1).
-    ///
-    /// Vanilla: strength = specialAbilityParameter / (d_mirror² × d_diff²) × count
-    /// AltMirror: strength = A_mirror / (π × R_planet²) × count
-    ///
-    /// Shades are left unchanged.
+    /// Storage for fractional mirror allocation. The key is the MirrorTargetInfo
+    /// instance (stable identity within a session). Value is the decimal unused
+    /// portion (ceil - user_input).
     /// </summary>
+    static class MirrorFraction
+    {
+        public const long LOW_MASK = 0x00000000FFFFFFFFL;
+        public const long SCALE    = 1_000_000L;
+
+        public static readonly ConditionalWeakTable<SpaceMirrorOrShadeFacility.MirrorTargetInfo, StrongBox<decimal>>
+            Unused = new();
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // Patch 1: Load — extract fraction from high bits before base overwrites
+    // ────────────────────────────────────────────────────────────────────
+    [HarmonyPatch(typeof(SpaceMirrorOrShadeFacility), nameof(SpaceMirrorOrShadeFacility.OnAfterLoadSave))]
+    static class Patch_OnAfterLoadSave_Mirror
+    {
+        static void Prefix(SpaceMirrorOrShadeFacility __instance)
+        {
+            if (!__instance.IsMirror()) return;
+
+            foreach (var target in __instance.Targets)
+            {
+                int unusedMillionths = (int)((ulong)target.mirrorsCount >> 32);
+                if (unusedMillionths > 0)
+                {
+                    MirrorFraction.Unused.Remove(target);
+                    MirrorFraction.Unused.Add(target,
+                        new StrongBox<decimal>(unusedMillionths / (decimal)MirrorFraction.SCALE));
+                }
+                target.mirrorsCount &= MirrorFraction.LOW_MASK;
+            }
+        }
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // Patch 2: Save — encode fraction into high bits, survives Serialize()
+    // ────────────────────────────────────────────────────────────────────
+    [HarmonyPatch(typeof(LoadSaveManager), nameof(LoadSaveManager.SaveToFile))]
+    static class Patch_SaveToFile_Mirror
+    {
+        static void Prefix()
+        {
+            var oim = MonoBehaviourSingleton<ObjectInfoManager>.Instance;
+            if (oim?.allObjectInfos == null) return;
+
+            foreach (var oi in oim.allObjectInfos)
+            {
+                if (oi?.ObjectsInfoData == null) continue;
+
+                foreach (var oid in oi.ObjectsInfoData)
+                {
+                    if (oid?.ProductionItem == null) continue;
+
+                    foreach (var pi in oid.ProductionItem)
+                    {
+                        if (pi is SpaceMirrorOrShadeFacility fac && fac.IsMirror())
+                        {
+                            foreach (var target in fac.Targets)
+                            {
+                                if (MirrorFraction.Unused.TryGetValue(target, out var box) && box.Value > 0m)
+                                {
+                                    int unusedMillionths = (int)(box.Value * MirrorFraction.SCALE);
+                                    target.mirrorsCount &= MirrorFraction.LOW_MASK;
+                                    target.mirrorsCount |= (long)unusedMillionths << 32;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        static void Postfix()
+        {
+            var oim = MonoBehaviourSingleton<ObjectInfoManager>.Instance;
+            if (oim?.allObjectInfos == null) return;
+
+            foreach (var oi in oim.allObjectInfos)
+            {
+                if (oi?.ObjectsInfoData == null) continue;
+
+                foreach (var oid in oi.ObjectsInfoData)
+                {
+                    if (oid?.ProductionItem == null) continue;
+
+                    foreach (var pi in oid.ProductionItem)
+                    {
+                        if (pi is SpaceMirrorOrShadeFacility facility)
+                        {
+                            foreach (var target in facility.Targets)
+                            {
+                                target.mirrorsCount &= MirrorFraction.LOW_MASK;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // Patch 3: UI input — intercept decimal, store fraction, pass integer
+    // ────────────────────────────────────────────────────────────────────
+    [HarmonyPatch(typeof(MirrorTargetingWindow), "MirrorsInputFieldEndEdit")]
+    static class Patch_MirrorsInputFieldEndEdit
+    {
+        static void Prefix(MirrorTargetingWindow __instance, MirrorTargetRow row, ref string value)
+        {
+            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal parsed))
+            {
+                return; // let original long.TryParse handle the fallback
+            }
+
+            long ceilVal = (long)Math.Ceiling(parsed);
+            decimal unused = Math.Max(0m, ceilVal - parsed);
+
+            MirrorFraction.Unused.Remove(row.TargetInfo);
+            if (unused > 0m && ceilVal > 0L)
+                MirrorFraction.Unused.Add(row.TargetInfo, new StrongBox<decimal>(unused));
+
+            value = ceilVal.ToString(); // original sees an integer
+        }
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // Patch 4: UI display — show decimal if fractional, allow decimal input
+    // ────────────────────────────────────────────────────────────────────
+    [HarmonyPatch(typeof(MirrorTargetRow), nameof(MirrorTargetRow.SetData))]
+    static class Patch_MirrorTargetRow_SetData
+    {
+        static void Postfix(MirrorTargetRow __instance)
+        {
+            var input = __instance.MirrorsInputField;
+            input.characterValidation = TMP_InputField.CharacterValidation.Decimal;
+
+            if (MirrorFraction.Unused.TryGetValue(__instance.TargetInfo, out var box))
+            {
+                input.text =
+                    (__instance.TargetInfo.mirrorsCount - box.Value).ToString("0.######");
+            }
+        }
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // Patch 5: Strength calculation (modified existing — fractional aware)
+    // ────────────────────────────────────────────────────────────────────
     [HarmonyPatch(typeof(SpaceMirrorOrShadeFacility), "GetFinalStrengthForObject", new[] { typeof(ObjectInfo) })]
     class Patch_GetFinalStrengthForObject
     {
@@ -58,7 +206,9 @@ namespace AlternativeHabitabilityModel
                 return false;
             }
 
-            long allocatedCount = mirrorTargetInfo.allocatedCount;
+            double allocatedCount = mirrorTargetInfo.allocatedCount;
+            if (MirrorFraction.Unused.TryGetValue(mirrorTargetInfo, out var unusedBox))
+                allocatedCount -= (double)unusedBox.Value;
 
             if (allocatedCount <= 0) { __result = 0.0; return false; }
 

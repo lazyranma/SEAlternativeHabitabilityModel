@@ -239,9 +239,15 @@ With `MirrorAreaMkm2 = 40` (default):
 | Mars | 3,396 | 36.2 | +110.4% |
 | Titan | 2,575 | 20.8 | +192.1% |
 | Venus | 6,052 | 115.1 | +34.8% |
-| Ceres | 455 | 0.65 | +6,153%³ |
+| Ceres | 455 | 0.65 | +6,153% |
 
-³ Yes, this would fry Ceres. Reduce `MirrorAreaMkm2` in config and use Teddit patcher to make mirrors cheaper if you want to use mirrors on it. A better solution for small targets may come later.
+### Fractional mirror allocation
+
+Allocated mirror counts accept decimal values (e.g. `1.5`, `0.75`), representing
+mirrors whose output is unfocused (some light misses the target),
+allowing fine-tuning of flux output. One mirror cannot be allocated to multiple
+targets, so the fractional remainder is lost — e.g. if you have 3
+mirrors and assign 1.1, you have only 1 mirror left.
 
 ## Alternative Scaling Model
 

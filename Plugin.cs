@@ -199,6 +199,10 @@ namespace AlternativeHabitabilityModel
 
             if (AlternativeMirrorModel.Value)
             {
+                Patch(harmony, typeof(Patch_OnAfterLoadSave_Mirror));
+                Patch(harmony, typeof(Patch_SaveToFile_Mirror));
+                Patch(harmony, typeof(Patch_MirrorsInputFieldEndEdit));
+                Patch(harmony, typeof(Patch_MirrorTargetRow_SetData));
                 Patch(harmony, typeof(Patch_GetFinalStrengthForObject));
                 Log.LogInfo("Alternative Mirror Model enabled.");
             }

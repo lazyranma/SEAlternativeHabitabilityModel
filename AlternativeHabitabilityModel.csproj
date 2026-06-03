@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>14.0</LangVersion>
     <AssemblyName>AlternativeHabitabilityModel</AssemblyName>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <PluginVersion>0.3.0</PluginVersion>
@@ -21,6 +21,7 @@
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Assembly-CSharp"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.UI"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.TextMeshPro"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\Unity.TextMeshPro.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Sirenix.Serialization"><HintPath>$(GameDir)\Solar Expanse_Data\Managed\Sirenix.Serialization.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
 
