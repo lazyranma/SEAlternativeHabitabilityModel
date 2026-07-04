@@ -33,9 +33,23 @@ namespace AlternativeHabitabilityModel
     // ────────────────────────────────────────────────────────────────────
     // Patch 1: Load — extract fraction from high bits before base overwrites
     // ────────────────────────────────────────────────────────────────────
-    [HarmonyPatch(typeof(SpaceMirrorOrShadeFacility), nameof(SpaceMirrorOrShadeFacility.OnAfterLoadSave))]
+    [HarmonyPatch(typeof(SpaceMirrorOrShadeFacility))]
     static class Patch_OnAfterLoadSave_Mirror
     {
+        static System.Reflection.MethodBase TargetMethod()
+        {
+            const System.Reflection.BindingFlags flags =
+                System.Reflection.BindingFlags.Instance
+                | System.Reflection.BindingFlags.Public
+                | System.Reflection.BindingFlags.NonPublic;
+            var t = typeof(SpaceMirrorOrShadeFacility);
+            var m = t.GetMethod("OnLoadState", flags) // Open beta (0.26.7+)
+                ?? t.GetMethod("OnAfterLoadSave", flags) // Stable (0.26.6-)
+                ?? throw new System.MissingMethodException("SpaceMirrorOrShadeFacility is missing both OnLoadState and OnAfterLoadSave");
+
+            return m;
+        }
+
         static void Prefix(SpaceMirrorOrShadeFacility __instance)
         {
             if (!__instance.IsMirror()) return;
