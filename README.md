@@ -304,6 +304,8 @@ Two breathing modes are evaluated, and the better score is chosen:
 
 Hover the habitability panel's composition icon to see all partial pressures with colour-coded ratings and an equipment recommendation.
 
+Mission completion and farm build checks are unaffected by this model — they still require a specific oxygen mass fraction.
+
 Note: Be aware that oxygen, carbon dioxide, fuel, and hydrogen have toxicity curves that penalize high concentrations relative to total above-ground deposit amounts via an independent toxicity score. The uranium curve, surprisingly, penalizes low concentrations instead.
 
 ## Alternative Photochemistry Model

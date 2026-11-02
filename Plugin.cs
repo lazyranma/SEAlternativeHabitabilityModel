@@ -218,6 +218,7 @@ namespace AlternativeHabitabilityModel
                 h.composition.curve = AnimationCurve.Linear(0f, 0f, 1f, 100f);
 
                 Patch(harmony, typeof(Patch_UpdateComposition));
+                Patch(harmony, typeof(Patch_Result_CompositionScore));
                 Patch(harmony, typeof(Patch_FillInfo_Tooltip));
                 Patch(harmony, typeof(Patch_CompositionState_PropagateCtor));
                 Patch(harmony, typeof(Patch_CompositionState_PropagateOps));

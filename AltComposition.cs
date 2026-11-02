@@ -197,18 +197,29 @@ namespace AlternativeHabitabilityModel
     }
 
     // ── Patch: UpdateComposition ──────────────────────────────────────
+    //
+    // IMPORTANT: `HabitabilityParametersNew.composition` must keep its vanilla
+    // meaning (O2 mass / atmosphere mass). Everything that gates gameplay reads
+    // that field directly:
+    //   * CanBuildParameter.TerraformParameterOneCanBuild.Check  (build gates)
+    //     -> build_earthfarm requires Composition in [0.15, 0.30]
+    //   * CompanyObjectiveData.CheckHabitabilityParameter        (contracts)
+    //     -> contract_mars_terraform_atmo1/atmo2 require [0.19, 0.30]
+    //   * ObjectInfo / UI display
+    // So this is a Postfix: vanilla computes the raw ratio, and we only *store*
+    // the breathability score. Patch_Result_CompositionScore feeds that score
+    // into the habitability rating without touching the stored field.
 
     [HarmonyPatch(typeof(TerraformationConfig.HabitabilityParametersNew), "UpdateComposition")]
     class Patch_UpdateComposition
     {
-        static bool Prefix(TerraformationConfig.HabitabilityParametersNew __instance, ObjectInfo objectInfo)
+        static void Postfix(TerraformationConfig.HabitabilityParametersNew __instance, ObjectInfo objectInfo)
         {
             var gf = CompositionModel.ComputeFractions(objectInfo);
+
+            CompositionModel.States.Remove(__instance);
             if (!gf.hasAtmosphere)
-            {
-                __instance.composition = 0.0;
-                return false;
-            }
+                return; // no atmosphere: vanilla already wrote composition = 0
 
             double p = __instance.pressure;
 
@@ -219,28 +230,48 @@ namespace AlternativeHabitabilityModel
             double t2Raw = CompositionModel.ComputeScore(gf, 1.0);
             double t2 = t2Raw * 0.5 * CompositionModel.CollectionEfficiency(p);
 
-            __instance.composition = Math.Max(t1, t2);
+            double score = Math.Max(t1, t2);
 
-            // Store computed values for tooltip (follows AltSwing pattern)
-            CompositionModel.States.Remove(__instance);
-            if (gf.hasAtmosphere)
+            CompositionModel.ComputePressures(gf, p,
+                out double atmPpO2, out _, out double ppCO2, out double eqN2);
+            CompositionModel.States.Add(__instance, new CompositionModel.State
             {
-                CompositionModel.ComputePressures(gf, p,
-                    out double atmPpO2, out _, out double ppCO2, out double eqN2);
-                CompositionModel.States.Add(__instance, new CompositionModel.State
-                {
-                    AtmPpO2 = atmPpO2, PpCO2 = ppCO2, EqN2 = eqN2,
-                    FO2 = gf.f_O2, FCO2 = gf.f_CO2, FN2 = gf.f_N2, FAr = gf.f_Ar,
-                    Breathability = __instance.composition, T1 = t1, T2 = t2
-                });
-            }
+                AtmPpO2 = atmPpO2, PpCO2 = ppCO2, EqN2 = eqN2,
+                FO2 = gf.f_O2, FCO2 = gf.f_CO2, FN2 = gf.f_N2, FAr = gf.f_Ar,
+                Breathability = score, T1 = t1, T2 = t2
+            });
 
             Plugin.Log.LogDebug(
                 $"AltComposition: {objectInfo.ObjectName} " +
                 $"P={p:F3}atm atmPpO2={p * gf.f_O2:F3} " +
-                $"T1={t1:F3} T2={t2:F3} → comp={__instance.composition:F3}");
+                $"T1={t1:F3} T2={t2:F3} → score={score:F3} " +
+                $"(raw composition kept {__instance.composition:F4})");
+        }
+    }
 
-            return false;
+    // ── Patch: feed the score into the habitability rating ────────────
+    //
+    // `Result` evaluates habitability.composition.curve over `composition`.
+    // The Alternative Composition Model keeps a linear curve (0..1 -> 0..100),
+    // so we temporarily swap the stored raw ratio for the 0..1 breathability
+    // score while the getter runs, then restore it in the Finalizer.
+    // Finalizer (not Postfix) so the field is restored even if `Result` throws.
+
+    [HarmonyPatch(typeof(TerraformationConfig.HabitabilityParametersNew), "get_Result")]
+    static class Patch_Result_CompositionScore
+    {
+        static void Prefix(TerraformationConfig.HabitabilityParametersNew __instance, ref double __state)
+        {
+            __state = __instance.composition;
+            if (CompositionModel.States.TryGetValue(__instance, out var state))
+                __instance.composition = state.Breathability;
+        }
+
+        static Exception Finalizer(TerraformationConfig.HabitabilityParametersNew __instance,
+                                   double __state, Exception __exception)
+        {
+            __instance.composition = __state;
+            return __exception;
         }
     }
 
@@ -254,7 +285,6 @@ namespace AlternativeHabitabilityModel
             if (!Plugin.AlternativeCompositionModel.Value) return;
 
             var hp = oi.HabitabilityParameters;
-            double score = hp.composition;
 
             if (!CompositionModel.States.TryGetValue(hp, out var state))
             {
@@ -262,6 +292,12 @@ namespace AlternativeHabitabilityModel
                     $"<size=14><font=\"Oxanium-Medium SDF\"><b><color=white>{L("AltComp.Header")}</color></b></font></size>\n\n{L("AltComp.NoAtmosphere")}");
                 return;
             }
+
+            // Vanilla FillInfo rendered the raw O2 mass fraction in the composition
+            // row. Show the breathability score (number + icon colour) there instead;
+            // the stored field itself stays vanilla for build gates and contracts.
+            double score = state.Breathability;
+            SetCompositionRow(__instance, score);
 
             double atmPpO2 = state.AtmPpO2;
             double ppCO2   = state.PpCO2;
@@ -345,6 +381,20 @@ namespace AlternativeHabitabilityModel
                 $"<color=#C0C0C0>{string.Format(L("AltComp.ScoreHint"), equipHint)}</color>";
 
             SetTooltip(__instance, tooltip);
+        }
+
+        static void SetCompositionRow(UIBasicInfoHabitabilityParameters instance, double score)
+        {
+            var row = Traverse.Create(instance)
+                .Field("composition")
+                .GetValue<UIBasicInfoHabitabilitySingleParameter>();
+            if (row == null) return;
+
+            var habitability = SerializedMonoBehaviourSingleton<AllScriptableObjectManager>
+                .Instance.TerraformationConfig.Habitability;
+
+            row.SetData(habitability.composition, score,
+                new object[] { score * 100.0, habitability.composition.maxInput * 100.0 });
         }
 
         static void SetTooltip(UIBasicInfoHabitabilityParameters instance, string text)
