@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.0: Alternative Scaling Model Retired
+
+- Retired the **Alternative Scaling Model** — the vanilla game now uses a similar linear pressure and
+  water model, so the replacement is no longer needed.
+
 ## v0.3.3: Alternative Composition Model Fix
 
 - Fixed the **Alternative Composition Model** interfering with farm construction requirements and

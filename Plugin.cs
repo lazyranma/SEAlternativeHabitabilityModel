@@ -19,9 +19,6 @@ namespace AlternativeHabitabilityModel
 
         internal static ConfigEntry<bool> AlternativeSwingModel;
         internal static ConfigEntry<bool> AlternativeMirrorModel;
-        internal static ConfigEntry<bool> AlternativeScalingModel;
-        internal static ConfigEntry<bool> ScaleDeposits;
-        internal static ConfigEntry<bool> ScaleDepositsOnLoadingSave;
         internal static ConfigEntry<bool> AlternativeCompositionModel;
         internal static ConfigEntry<bool> AlternativePhotochemistryModel;
         internal static ConfigEntry<bool> UpdateAverageTemperature;
@@ -31,11 +28,8 @@ namespace AlternativeHabitabilityModel
         internal static ConfigEntry<double> MirrorAreaMkm2;
         internal static ConfigEntry<double> NightFloor;
         internal static ConfigEntry<double> BaseRockHC;
-        internal static ConfigEntry<double> GasScaling;
-        internal static ConfigEntry<double> WaterScaling;
 
         private bool _patched;
-        private bool _scalingInitDone;
 
         private void Awake()
         {
@@ -107,46 +101,6 @@ namespace AlternativeHabitabilityModel
                     "Rock heat capacity at 1-day rotation (J/m²·K).",
                     new AcceptableValueRange<double>(1000.0, 1e8)));
 
-            // ── Scaling model ──
-            AlternativeScalingModel = Config.Bind(
-                "Scaling",
-                "AlternativeScalingModel",
-                false,
-                "Enable the alternative (linear) scaling model.\n" +
-                "Replaces exponential atmosphere/ocean mass scaling with a linear\n" +
-                "relationship.");
-
-            ScaleDeposits = Config.Bind(
-                "Scaling",
-                "ScaleDeposits",
-                true,
-                "Rescale initial deposits for the linear model (new games only).");
-
-            ScaleDepositsOnLoadingSave = Config.Bind(
-                "Scaling",
-                "ScaleDepositsOnLoadingSave",
-                false,
-                "Rescale deposits on save load (one-shot conversion).\n" +
-                "Enable, load a save, save the game, then disable.");
-
-            GasScaling = Config.Bind(
-                "Scaling",
-                "GasScaling",
-                1.0,
-                new ConfigDescription(
-                    "Multiplier for the linear pressure formula.\n" +
-                    "1.0 = Earth unchanged. 2.0 = double pressure at same mass.",
-                    new AcceptableValueRange<double>(0.0000001, 1e6)));
-
-            WaterScaling = Config.Bind(
-                "Scaling",
-                "WaterScaling",
-                1.0,
-                new ConfigDescription(
-                    "Multiplier for the linear water formula.\n" +
-                    "1.0 = Earth unchanged. 2.0 = double water score at same mass.",
-                    new AcceptableValueRange<double>(0.0000001, 1e6)));
-
             // ── Composition model ──
             AlternativeCompositionModel = Config.Bind(
                 "Composition",
@@ -169,11 +123,7 @@ namespace AlternativeHabitabilityModel
             if (!_patched)
                 ApplyPatches();
 
-            if (!_scalingInitDone)
-                TryInitScaling();
-
-            if (_patched && _scalingInitDone)
-                SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         private void ApplyPatches()
@@ -233,28 +183,6 @@ namespace AlternativeHabitabilityModel
             }
 
             _patched = true;
-        }
-
-        private void TryInitScaling()
-        {
-            if (!AlternativeScalingModel.Value)
-            {
-                _scalingInitDone = true;
-                return;
-            }
-
-            if (!ScalingRefMasses.TryInit())
-                return;
-
-            var harmony = new Harmony("com.lazyranma.althabitabilitymodel");
-            Patch(harmony, typeof(Patch_UpdatePressure_Linear));
-            Patch(harmony, typeof(Patch_CurrentScaledWaterAmount_Linear));
-            Patch(harmony, typeof(Patch_ScaledDownIdealWaterAmount_Linear));
-            Patch(harmony, typeof(Patch_ExtractFromSaveGameData_Rescale));
-
-            Log.LogInfo("Alternative Scaling Model enabled.");
-
-            _scalingInitDone = true;
         }
 
         private static void Patch(Harmony harmony, Type type)
