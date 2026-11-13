@@ -13,6 +13,13 @@ obj/
 *.dll
 *.pdb
 
+# Workshop publish
+workshop/_publish*.vdf
+
+# Python
+__pycache__/
+*.pyc
+
 # User-specific files
 *.user
 *.suo

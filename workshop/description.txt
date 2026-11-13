@@ -1,0 +1,36 @@
+Several independently-toggleable model replacements.
+[url=https://github.com/lazyranma/SEAlternativeHabitabilityModel]GitHub[/url] | [url=https://discord.com/channels/1278330334982967468/1509963715024523336]Discord[/url]
+[h2]Models[/h2]
+[list]
+[*][b]Alternative Swing Model[/b] — replaces the vanilla day/night temperature swing with a physically-grounded asymmetric model.
+[*][b]Alternative Mirror Model[/b] — replaces the vanilla mirror strength formula with a physically realistic model where mirrors only affect their own planetary system.
+[*][b]Alternative Composition Model[/b] — replaces the vanilla oxygen mass-fraction check with a partial-pressure breathability model that evaluates all gases.
+[*][b]Alternative Photochemistry Model[/b] — adds hydrogen and methane photochemical oxidation and thermal combustion.
+[/list]
+The [b]Alternative Scaling Model[/b] was retired, because the vanilla game adopted a similar linear scaling model.
+
+Additional model replacements may be added in the future.
+[h2]Simulator[/h2]
+[strike]Try the model live: [url=https://lazyranma.github.io/SETerraformingSimulator/altswing_altmirror.html]Terraforming Simulator[/url]. Only Swing and Mirror models are supported so far.[/strike] (Not updated for the new vanilla temperature model yet.)
+[h2]Alternative Swing Model[/h2]
+The main motivation for this model is to make Venus and Mercury terraformable while staying close to how real physics works.
+
+Key improvements over vanilla:
+[list]
+[*][b]Mirrors reduce the swing[/b] — half their output illuminates the night side, bringing it closer to the day.
+[*][b]Shades reduce the swing[/b] — less total flux means smaller day/night extremes.
+[*][b]Atmosphere transports heat[/b] — winds carry energy from day to night.
+[*][b]Min/max temperatures have physical limits[/b] — on slow rotators, a night floor prevents collapse below the planetary baseline and the day ceiling is capped by the subsolar limit.
+[*][b]Swing is naturally asymmetric[/b] — the cold side drops ~1.8× more than the hot side rises.
+[*][b]True mean temperature[/b] — option to change the average temperature to the actual (T_hot+T_cold)/2, not the equilibrium point (disabled by default).
+[*][b]Venus and Mercury are terraformable[/b] — without a thick hydrogen-oxygen atmosphere, but beware of the runaway greenhouse effect.
+[/list]
+[h2]Alternative Mirror Model[/h2]
+The goal is to replace the vanilla formula — which is physically unrealistic — with a model that respects real physics.
+[code]Vanilla:   strength = 0.216 / (d_mirror² × d_diff²)
+AltMirror: strength = A / (π × R_planet²)[/code]
+The model assumes mirrors are close enough to the target that all collected light hits. In practice this means the mirror must be within the same planetary system — the plugin enforces this by ignoring mirrors around other planets or in solar orbit. Mirror area A is configurable (MirrorAreaMkm2, default 40 million km²).
+[h2]Alternative Photochemistry Model[/h2]
+Hydrogen and methane are not stable in an oxygen atmosphere. UV light from the star slowly breaks them down, and if the planet gets hot enough they ignite and burn. This model simulates that process.
+[h2]Documentation[/h2]
+Read the full description on [url=https://github.com/lazyranma/SEAlternativeHabitabilityModel]GitHub[/url].
