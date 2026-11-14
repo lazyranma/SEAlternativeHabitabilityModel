@@ -1,12 +1,11 @@
 # Alternative Habitability Model
-BepInEx plugin for Solar Expanse with four independently-toggleable model replacements:
+BepInEx plugin for Solar Expanse with five independently-toggleable model replacements:
 
 - **[Alternative Swing Model](#alternative-swing-model)** — replaces the vanilla day/night temperature swing with a physically-grounded asymmetric model.
 - **[Alternative Mirror Model](#alternative-mirror-model)** — replaces the vanilla mirror strength formula with a physically realistic model where mirrors only affect their own planetary system.
+- **[Alternative Scaling Model](#alternative-scaling-model)** — replaces the exponential atmosphere/ocean mass scaling with linear relationships using direct multipliers. **Retired in version 0.4.0 because the vanilla game adopted a similar linear scaling model.**
 - **[Alternative Composition Model](#alternative-composition-model)** — replaces the vanilla oxygen mass-fraction check with a partial-pressure breathability model that evaluates all gases.
 - **[Alternative Photochemistry Model](#alternative-photochemistry-model)** — adds hydrogen and methane photochemical oxidation and thermal combustion.
-
-The **Alternative Scaling Model** was retired, because the vanilla game adopted a similar linear scaling model.
 
 > This project was developed with LLM assistance.
 
@@ -36,7 +35,7 @@ Key improvements over vanilla:
 - **Min/max temperatures have physical limits** — on slow rotators, a night floor prevents collapse below the planetary baseline and the day ceiling is capped by the subsolar limit.
 - **Swing is naturally asymmetric** — the cold side drops ~1.8× more than the hot side rises.
 - **True mean temperature** — Option to change the average temperature to the actual (T_hot+T_cold)/2, not the equilibrium point (disabled by default).
-- **Venus and Mercury are terraformable** — without thick hydrogen-oxygen atmosphere, but beware of runaway greenhouse effect.
+- **Venus and Mercury are terraformable** — without a thick hydrogen-oxygen atmosphere, but beware of the runaway greenhouse effect.
 
 ### 1. Heat capacity calculation
 
@@ -250,6 +249,41 @@ allowing fine-tuning of flux output. One mirror cannot be allocated to multiple
 targets, so the fractional remainder is lost — e.g. if you have 3
 mirrors and assign 1.1, you have only 1 mirror left.
 
+## Alternative Scaling Model
+
+Disabled by default.\
+This model replaces the game's exponential pressure and water formulas with linear
+relationships. Earth's atmosphere and ocean masses are used as reference
+points, so `GasScaling=1` and `WaterScaling=1` produce the same pressure
+and water score as vanilla for Earth with default deposits.
+
+```
+pressure                    = mass × GasScaling × gasNorm × 1000 × g / area / 101325
+CurrentScaledWaterAmount    = mass × WaterScaling × waterNorm
+ScaledDownIdealWaterAmount  = IdealWaterAmount / (WaterScaling × waterNorm)
+```
+
+Set `GasScaling` to 2.0 to double the pressure at the same mass; 0.5 to
+halve it. `WaterScaling` works the same way.
+
+### Deposit rescaling
+
+Because the linear model would produce different pressures and water scores
+than vanilla, deposit amounts are rescaled for *new games* when
+`ScaleDeposits` is enabled (default on).
+For each planet or moon, gas and water deposit amounts are adjusted so the
+linear model produces the same pressure and water score as vanilla.
+
+If you want custom deposit amounts, use the Teddit patcher and disable
+`ScaleDeposits`.
+
+To convert an *existing save* to the linear model:
+
+1. Enable `ScaleDepositsOnLoadingSave` in the config.
+2. Load your save — deposits will be rescaled on load.
+3. Save the game.
+4. Disable `ScaleDepositsOnLoadingSave`.
+
 ## Alternative Composition Model
 
 Replaces the vanilla breathability check — which only tests whether O₂ is at least 20% of atmosphere mass — with a partial-pressure-based model that asks: can humans actually breathe this air?
@@ -372,6 +406,16 @@ On first launch a config file is generated at `BepInEx/config/com.lazyranma.alth
 |---|---|---|---|
 | `AlternativeMirrorModel` | bool | true | Enable the alternative mirror model. |
 | `MirrorAreaMkm2` | double | 40 | Mirror area in million km². |
+
+### [Scaling] section
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `AlternativeScalingModel` | bool | false | Enable the alternative scaling model. |
+| `ScaleDeposits` | bool | true | Rescale initial deposits for the linear model (new games only). |
+| `ScaleDepositsOnLoadingSave` | bool | false | Rescale deposits on save load. Enable, load, save, disable. |
+| `GasScaling` | double | 1.0 | Multiplier for linear pressure. |
+| `WaterScaling` | double | 1.0 | Multiplier for linear water. |
 
 ### [Composition] section
 
