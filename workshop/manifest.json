@@ -1,0 +1,10 @@
+{
+  "appid": 1369700,
+  "publishedfileid": 3834246135,
+  "description_file": "description.txt",
+  "previewfile": "logo.jpg",
+  "tags": ["BepInEx"],
+  "contentfolder": "../../../game_dir/BepInEx/plugins/AlternativeHabitabilityModel",
+  "required_files": ["AlternativeHabitabilityModel.dll"],
+  "changelog": {"path": "../CHANGELOG.md"}
+}
