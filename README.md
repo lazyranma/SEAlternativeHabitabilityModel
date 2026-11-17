@@ -431,8 +431,22 @@ On first launch a config file is generated at `BepInEx/config/com.lazyranma.alth
 
 ## Installation
 
+### Nexus Mods
+[Alternative Habitability Model on Nexus Mods](https://www.nexusmods.com/solarexpanse/mods/41).
+
+### Manual
+
 1. Install BepInEx — Follow the [BepInEx setup guide](https://docs.bepinex.dev/articles/user_guide/installation/index.html).
 2. Unzip `AlternativeHabitabilityModel_vX.Y.Z.zip` to `BepInEx/plugins/`.
+
+### Steam Workshop — experimental game branch
+
+Workshop mod support only exists in the experimental branch; on stable, install manually or via Vortex instead.
+
+1. Install BepInEx — Follow the [BepInEx setup guide](https://docs.bepinex.dev/articles/user_guide/installation/index.html).
+2. Subscribe — [Alternative Habitability Model on the Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3834246135).
+3. Remove any existing install — If the plugin is already in `BepInEx\plugins\AlternativeHabitabilityModel`, quit the game and delete that folder first; the game cannot update an installed mod.
+4. Start twice — Subscribed items are only copied into `BepInEx\plugins` when the game exits, so launch, quit, and launch again.
 
 ## Build
 
